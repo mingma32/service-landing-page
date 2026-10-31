@@ -36,10 +36,14 @@ npm start
 - `components/`: reusable header, hero, problem, benefits, process, form and CTA components
 - `public/logo.png`: supplied company logo
 
-## Form behavior
+## Flodesk signup
 
-The form validates required fields, email, WhatsApp number and optional URL, then simulates submission and redirects to `/thank-you?demo=1`. No details are sent or saved. Both pages clearly explain the demo status. WhatsApp opens +91 7987638713 with an offer-specific message. The checklist is not generated or delivered by this code.
+The page now uses the official Flodesk embed for form `6ae5c2b4753c3852487971f7` and loads `https://assets.flodesk.com/universal.js` once. `components/FlodeskForm.tsx` initializes the exact form ID provided by the owner. No API key is needed or exposed. Signup requests are handled by Flodesk, including its CSRF, validation, CAPTCHA, double opt-in and assigned segments.
 
-Before collecting real leads, connect a backend, validate server-side, add abuse protection, and redirect only after successful storage. Update the demo notices only after that integration works. Implement checklist delivery and demo scheduling before promising those actions occurred.
+The existing site card and two-column desktop / single-column mobile layout style the native Flodesk controls. The embed always loads the form's currently published fields. Finish mapping and saving any fields in Flodesk: unmapped draft fields cannot be collected by the website. Map Business Name and Website or Facebook URL as required fields, and Anything You Want to Say as optional. Email, Full Name and WhatsApp Number must remain present. Never hard-code Flodesk's obfuscated field names or CSRF values.
 
-No urgency claims, stock images, testimonials or unsupported results are included.
+The old simulated redirect and all demo notices have been removed. A same-origin `/thank-you` redirect is performed only when Flodesk's native root enters its server-confirmed success stage after submission. Failed validation, network errors and CAPTCHA challenges do not trigger the site's success redirect. A short-lived session marker (timestamp only, no personal data) determines whether the Thank You page can show a received confirmation. Direct visits show neutral email instructions.
+
+The form's Flodesk settings currently control double opt-in. Keep the workflow published and set its trigger to the segment assigned to this form. Website code cannot publish or inspect account-level workflows, assign unsaved draft fields, or verify actual email delivery. Existing subscribers may not re-enter a workflow, depending on Flodesk's settings. Test with an email address you control, complete opt-in, then check the subscriber record, segment and workflow activity in Flodesk.
+
+In Flodesk, use a Thank You redirect of `https://service-landing-page-17fi.vercel.app/thank-you` without the old `?demo=1` query. The site's success-stage observer also keeps successful visitors on their current site's Thank You page.

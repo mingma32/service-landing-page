@@ -1,8 +1,27 @@
-"use client";
-import {useRef,useState} from 'react';import {useRouter} from 'next/navigation';import {ArrowUpRight,LockKeyhole,Check} from 'lucide-react';
-type Values={name:string,email:string,phone:string,business:string,url:string,message:string};
-const initial:Values={name:'',email:'',phone:'',business:'',url:'',message:''};
-export default function CTAForm(){const router=useRouter();const [values,setValues]=useState(initial);const [errors,setErrors]=useState<Partial<Values>>({});const [busy,setBusy]=useState(false);const form=useRef<HTMLFormElement>(null);
-function submit(e:React.FormEvent){e.preventDefault();if(busy)return;const next:Partial<Values>={};if(values.name.trim().length<2)next.name='Enter your full name.';if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))next.email='Enter a valid email address.';if(!/^\+?[\d\s().-]{7,22}$/.test(values.phone)||values.phone.replace(/\D/g,'').length<7||values.phone.replace(/\D/g,'').length>15)next.phone='Enter a valid number with country code.';if(!values.business.trim())next.business='Enter your lodge or business name.';if(values.url.trim()){try{const u=new URL(values.url);if(!['https:','http:'].includes(u.protocol)||!u.hostname.includes('.'))throw Error();}catch{next.url='Enter a complete URL starting with https://';}}setErrors(next);if(Object.keys(next).length){requestAnimationFrame(()=>form.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());return;}setBusy(true);router.push('/thank-you?demo=1');}
-const fields:{key:keyof Values,label:string,placeholder:string,type?:string,required?:boolean,autoComplete?:string}[]=[{key:'name',label:'Full Name',placeholder:'Your full name',required:true,autoComplete:'name'},{key:'email',label:'Active Email',placeholder:'you@example.com',type:'email',required:true,autoComplete:'email'},{key:'phone',label:'WhatsApp Number',placeholder:'+977 98XXXXXXXX',type:'tel',required:true,autoComplete:'tel'},{key:'business',label:'Business Name',placeholder:'Your lodge or hotel name',required:true,autoComplete:'organization'},{key:'url',label:'Website or Facebook URL',placeholder:'https://',type:'url'}];
-return <section id="consultation" className="form-section"><div className="form-layout"><div className="form-intro"><span className="eyebrow">LET’S START WITH YOUR LODGE</span><h2>A little more clarity.<br/><span>A simpler next step.</span></h2><p>Get the free Lodge Money Leak Checklist and explore your free 20-minute demo.</p><ul className="offer-list"><li><Check size={18}/> Checklist in English + Nepali</li><li><Check size={18}/> Free 20-minute system demo</li><li><Check size={18}/> Focused on your billing & bookings</li></ul><div className="demo-note">Preview mode: this form demonstrates the experience. Details are not sent or saved. Message us on WhatsApp to request the offer.</div></div><form ref={form} className="lead-form" onSubmit={submit} noValidate><span className="form-kicker">YOUR FREE CHECKLIST + DEMO</span><h3>Tell us a little about your lodge.</h3><div className="fields">{fields.map(f=><div className={'field '+(f.key==='url'?'full':'')} key={f.key}><label htmlFor={f.key}>{f.label} {f.required?<span aria-label="required">*</span>:<small>(optional)</small>}</label><input id={f.key} name={f.key} type={f.type||'text'} required={f.required} placeholder={f.placeholder} autoComplete={f.autoComplete} value={values[f.key]} onChange={e=>setValues({...values,[f.key]:e.target.value})} aria-invalid={!!errors[f.key]} aria-describedby={errors[f.key]?f.key+'-error':undefined}/>{errors[f.key]&&<p role="alert" className="error" id={f.key+'-error'}>{errors[f.key]}</p>}</div>)}<div className="field full"><label htmlFor="message">Anything You Want to Say <small>(optional)</small></label><textarea id="message" name="message" rows={3} placeholder="Tell us about your billing or booking challenges…" value={values.message} onChange={e=>setValues({...values,message:e.target.value})}/></div></div><button className="button submit" disabled={busy} type="submit">{busy?'Opening demo…':'Get My Free Checklist + Demo'}<ArrowUpRight size={18}/></button><p className="privacy"><LockKeyhole size={13}/> We respect your privacy. No spam.</p><p className="simulation">Demo submission only · No details are sent</p></form></div></section>}
+import { Check, LockKeyhole } from "lucide-react";
+import FlodeskForm from "./FlodeskForm";
+
+export default function CTAForm() {
+  return <section id="consultation" className="form-section">
+    <div className="form-layout">
+      <div className="form-intro">
+        <span className="eyebrow">LET’S START WITH YOUR LODGE</span>
+        <h2>A little more clarity.<br /><span>A simpler next step.</span></h2>
+        <p>Get the free Lodge Money Leak Checklist and explore your free 20-minute demo.</p>
+        <ul className="offer-list">
+          <li><Check size={18} /> Checklist in English + Nepali</li>
+          <li><Check size={18} /> Free 20-minute system demo</li>
+          <li><Check size={18} /> Focused on your billing &amp; bookings</li>
+        </ul>
+        <p className="signup-next-step">After signing up, check your inbox for a confirmation email. Confirm your subscription to receive the kit and follow-up emails.</p>
+      </div>
+      <div className="lead-form flodesk-card">
+        <span className="form-kicker">YOUR FREE CHECKLIST + DEMO</span>
+        <h3>Tell us a little about your lodge.</h3>
+        <FlodeskForm />
+        <p className="privacy"><LockKeyhole size={13} /> We respect your privacy. No spam.</p>
+        <p className="signup-consent">Sign up to receive your free kit and follow-up emails from Khumbu Nuru I.T. Services. You can unsubscribe at any time.</p>
+      </div>
+    </div>
+  </section>;
+}
