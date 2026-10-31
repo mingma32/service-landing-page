@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { normalizeWhatsAppNumber } from "@/lib/phone";
 
 const FORM_ID = "6ae5c2b4753c3852487971f7";
 const CONTAINER_ID = `fd-form-${FORM_ID}`;
@@ -56,7 +57,7 @@ function styleFields(container: HTMLElement) {
     input.placeholder = placeholders[field];
     input.maxLength = 255;
     if (field === "email") { input.type = "email"; input.autocomplete = "email"; }
-    if (field === "phone") { input.type = "tel"; input.autocomplete = "tel"; }
+    if (field === "phone") { input.type = "tel"; input.autocomplete = "tel"; input.inputMode = "tel"; input.removeAttribute("pattern"); }
     if (field === "name") input.autocomplete = "name";
     if (field === "business") input.autocomplete = "organization";
     if (field === "url") input.type = "url";
@@ -126,7 +127,14 @@ export default function FlodeskForm() {
         input.setAttribute("aria-invalid", "false");
         let message = "";
         if (input.required && !input.value.trim()) message = "Please complete this field.";
-        else if (group.dataset.lodgeField === "phone" && (!/^\+?[\d\s().-]+$/.test(input.value) || input.value.replace(/\D/g, "").length < 7 || input.value.replace(/\D/g, "").length > 15)) message = "Enter a valid WhatsApp number with country code.";
+        else if (group.dataset.lodgeField === "phone") {
+          const normalized = normalizeWhatsAppNumber(input.value);
+          if (!normalized) message = "Enter a phone number with 7–15 digits, for example +977 9846701009.";
+          else if (input.value !== normalized) {
+            input.value = normalized;
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+        }
         else if (group.dataset.lodgeField === "name" && input.value.trim().length < 2) message = "Enter your full name.";
         else if (input.value && !input.validity.valid) message = group.dataset.lodgeField === "url" ? "Enter a complete website or Facebook URL starting with https://." : group.dataset.lodgeField === "email" ? "Enter a valid email address." : "Please enter a valid value.";
         if (message) {
