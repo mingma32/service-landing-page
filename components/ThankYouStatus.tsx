@@ -14,7 +14,7 @@ export default function ThankYouStatus() {
   return <>
     <div className="confirmation-banner" role="status">
       <strong>{accepted ? "Your signup was received. Check your email to continue." : "Check your email for your next step."}</strong>
-      <span>If you receive a confirmation email, click its link to confirm your subscription. Your free kit and follow-up emails will follow your subscription settings.</span>
+      <span>If you receive a confirmation email, click its link to confirm your subscription. Confirming your subscription is the next step before receiving your kit.</span>
       <span>Can’t find it? Check Spam, Junk or Promotions, or message us below.</span>
     </div>
   </>;

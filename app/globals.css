@@ -64,3 +64,7 @@ header.header:after{content:'';position:absolute;bottom:0;left:calc(50% - 28px);
 .confirmation-banner{background:#edf8f4;border:1px solid #b6ddd1;color:#365f58;border-radius:10px;padding:18px;display:grid;gap:9px;font-size:13px;line-height:1.7;margin:25px auto;max-width:650px}
 .confirmation-banner strong{color:#135a48}
 @media(max-width:760px){.flodesk-mount [data-ff-el="fields"]{grid-template-columns:minmax(0,1fr)!important}.flodesk-mount [data-lodge-field] input:not([type=hidden]),.flodesk-mount [data-lodge-field] textarea{font-size:16px!important}.flodesk-mount [data-lodge-field="url"],.flodesk-mount [data-lodge-field="message"]{grid-column:auto}.flodesk-card h3{margin-bottom:24px}}
+
+/* Override provider floating-placeholder rules without changing hidden anti-spam spans. */
+#fd-form-6ae5c2b4753c3852487971f7 [data-lodge-field] input::placeholder,#fd-form-6ae5c2b4753c3852487971f7 [data-lodge-field] textarea::placeholder{color:#6d7c87!important;opacity:1!important}
+.flodesk-card .fd-form-label span{color:inherit!important}
