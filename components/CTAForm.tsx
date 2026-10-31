@@ -13,7 +13,7 @@ export default function CTAForm() {
           <li><Check size={18} /> Free 20-minute system demo</li>
           <li><Check size={18} /> Focused on your billing &amp; bookings</li>
         </ul>
-        <p className="signup-next-step">After signing up, check your inbox for a confirmation email. Confirm your subscription to receive the kit and follow-up emails.</p>
+        <p className="signup-next-step">After signing up, check your inbox for the next step. If you receive a confirmation email, click its link to continue.</p>
       </div>
       <div className="lead-form flodesk-card">
         <span className="form-kicker">YOUR FREE CHECKLIST + DEMO</span>

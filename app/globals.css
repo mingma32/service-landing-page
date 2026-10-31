@@ -68,3 +68,5 @@ header.header:after{content:'';position:absolute;bottom:0;left:calc(50% - 28px);
 /* Override provider floating-placeholder rules without changing hidden anti-spam spans. */
 #fd-form-6ae5c2b4753c3852487971f7 [data-lodge-field] input::placeholder,#fd-form-6ae5c2b4753c3852487971f7 [data-lodge-field] textarea::placeholder{color:#6d7c87!important;opacity:1!important}
 .flodesk-card .fd-form-label span{color:inherit!important}
+
+.flodesk-pending-note{order:2;font:11px/1.6 Arial,sans-serif;color:#687986;margin:7px 0 0}

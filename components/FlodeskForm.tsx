@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { normalizeWhatsAppNumber } from "@/lib/phone";
+import { SIGNUP_FIELDS } from "@/lib/flodesk-fields";
 
 const FORM_ID = "6ae5c2b4753c3852487971f7";
 const CONTAINER_ID = `fd-form-${FORM_ID}`;
@@ -81,6 +82,39 @@ function styleFields(container: HTMLElement) {
   });
 }
 
+// Retain every field from the supplied HTML without inventing backend mappings.
+// Native published fields take precedence and automatically replace these on reload.
+function restoreMissingFields(container: HTMLElement) {
+  const fields = container.querySelector<HTMLElement>('[data-ff-el="fields"]');
+  if (!fields) return;
+  SIGNUP_FIELDS.forEach(definition => {
+    if (fields.querySelector(`[data-lodge-field="${definition.key}"]`)) return;
+    const group = document.createElement("div");
+    group.className = "fd-form-group";
+    group.dataset.flodeskPending = "true";
+    const input = document.createElement("input");
+    input.id = `${CONTAINER_ID}-pending-${definition.key}`;
+    input.className = "fd-form-control";
+    input.required = definition.required;
+    input.type = "text";
+    input.maxLength = 255;
+    // No name: Flodesk must never receive an unfinished or invented mapping.
+    const label = document.createElement("label");
+    label.className = "fd-form-label";
+    label.htmlFor = input.id;
+    label.textContent = definition.label;
+    group.append(input, label);
+    const note = document.createElement("p");
+    note.className = "flodesk-pending-note";
+    note.textContent = definition.required
+      ? "This field is temporarily unavailable. Please try again later."
+      : "Please leave this optional field blank for now. You can send your message on WhatsApp on the next page.";
+    group.appendChild(note);
+    fields.appendChild(group);
+  });
+  styleFields(container);
+}
+
 export default function FlodeskForm() {
   const container = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
@@ -100,6 +134,7 @@ export default function FlodeskForm() {
     const observer = new MutationObserver(() => {
       if (cancelled) return;
       styleFields(element);
+      restoreMissingFields(element);
       const root = element.querySelector<HTMLElement>('[data-ff-el="root"]');
       if (root && element.querySelector('[data-ff-el="form"]')) {
         clearTimeout(timeout);
@@ -126,7 +161,8 @@ export default function FlodeskForm() {
         input.removeAttribute("aria-describedby");
         input.setAttribute("aria-invalid", "false");
         let message = "";
-        if (input.required && !input.value.trim()) message = "Please complete this field.";
+        if (group.dataset.flodeskPending === "true" && (input.required || input.value.trim())) message = input.required ? "This field is not available yet. Please try again later." : "This optional message cannot be saved yet. Please leave it blank and contact us on WhatsApp.";
+        else if (input.required && !input.value.trim()) message = "Please complete this field.";
         else if (group.dataset.lodgeField === "phone") {
           const normalized = normalizeWhatsAppNumber(input.value);
           if (!normalized) message = "Enter a phone number with 7–15 digits, for example +977 9846701009.";

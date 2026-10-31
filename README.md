@@ -47,3 +47,9 @@ The old simulated redirect and all demo notices have been removed. A same-origin
 The form's Flodesk settings currently control double opt-in. Keep the workflow published and set its trigger to the segment assigned to this form. Website code cannot publish or inspect account-level workflows, assign unsaved draft fields, or verify actual email delivery. Existing subscribers may not re-enter a workflow, depending on Flodesk's settings. Test with an email address you control, complete opt-in, then check the subscriber record, segment and workflow activity in Flodesk.
 
 In Flodesk, use a Thank You redirect of `https://service-landing-page-17fi.vercel.app/thank-you` without the old `?demo=1` query. The site's success-stage observer also keeps successful visitors on their current site's Thank You page.
+
+### Latest HTML and six-field layout
+
+The owner's updated raw HTML correctly maps Full Name to firstName, Active Email to email, WhatsApp Number to fields.9779800000000, Business Name to fields.nameOfYourBusiness, and Website/Facebook URL to fields.httpsYourwebsite. The optional message still has an unfinished fields. name. Its value cannot be saved until a real data-field mapping is created in Flodesk.
+
+`lib/flodesk-fields.ts` retains all six supplied field definitions. The live native embed remains authoritative for actual mappings and CSRF/anti-spam handling. If a published field is missing, its position is retained with a notice. A filled unmapped field blocks submission rather than losing the answer. Empty optional fields do not block mapped signups. Once the message is mapped and published in Flodesk, reload the website; the native field replaces the temporary control without another code change.
