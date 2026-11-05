@@ -35,6 +35,6 @@ export const SIGNUP_FIELDS = [
     "key": "message",
     "label": "Anything You Want to Say",
     "required": false,
-    "sourceName": "fields."
+    "sourceName": "fields.hotelProblem"
   }
 ] as const;

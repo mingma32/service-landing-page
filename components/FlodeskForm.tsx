@@ -52,6 +52,8 @@ function styleFields(container: HTMLElement) {
     else if (text.includes("name")) field = "name";
     if (!field) return;
     group.dataset.lodgeField = field;
+    const definition = SIGNUP_FIELDS.find(item => item.key === field);
+    if (definition) label.textContent = definition.label;
     input.required = field !== "message";
     group.dataset.lodgeRequired = String(input.required);
     const placeholders: Record<string, string> = { name: "Your full name", email: "you@example.com", phone: "+977 98XXXXXXXX", business: "Your lodge or hotel name", url: "https://", message: "Tell us about your billing or booking challenges…" };

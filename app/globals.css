@@ -39,7 +39,7 @@ header.header:after{content:'';position:absolute;bottom:0;left:calc(50% - 28px);
 .flodesk-mount [class$="__title"],.flodesk-mount [class$="__subtitle"]{display:none!important}
 .flodesk-mount [data-ff-el="fields"]{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:19px 15px!important;margin:0!important;padding:0!important}
 /* Deliberately do not override display on hidden Flodesk anti-spam controls. */
-.flodesk-mount [data-lodge-field]{display:flex!important;flex-direction:column!important;min-width:0!important;position:relative!important;left:auto!important;right:auto!important;width:auto!important;padding:0!important;margin:0!important;background:transparent!important}
+.flodesk-mount [data-lodge-field]{text-align:left!important;display:flex!important;flex-direction:column!important;min-width:0!important;position:relative!important;left:auto!important;right:auto!important;width:auto!important;padding:0!important;margin:0!important;background:transparent!important}
 .flodesk-mount [data-lodge-field="url"],.flodesk-mount [data-lodge-field="message"]{grid-column:1/-1}
 .flodesk-mount [data-lodge-field] .fd-form-label{order:0!important;display:block!important;position:static!important;transform:none!important;inset:auto!important;width:auto!important;padding:0!important;margin:0 0 7px!important;line-height:1.5!important;white-space:normal!important;opacity:1!important;visibility:visible!important;color:#2e4758!important;font-size:11px!important;letter-spacing:0!important;font-weight:700!important;font-family:Arial,sans-serif!important;pointer-events:auto!important}
 .flodesk-mount [data-lodge-required="true"] .fd-form-label:after{content:" *";color:#a03232}
